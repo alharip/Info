@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <math.h>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -12,16 +14,17 @@ class Matrice{
     int n, m, *a;
  public:
     Matrice();
+    Matrice(int l,int c);
     Matrice(Matrice& x);
     Matrice(int l,int c,int x[]);
     Matrice(int l,int c,int x[100][100]);
     ~Matrice();
     void vSet(int i,int j,int val);
     int vGet(int i,int j);
-    int VMaxCol(int j);
-    int VMaxLin(int i);
-    int VMinCol(int j);
-    int VMinLin(int i);
+    int VMaxCol(int j); /// 1 1 1 1 1 1 1 1 1 1 1 1
+    int VMaxLin(int i); /// 2 2 2 2 2 2 2 2 2 2 2 2
+    int VMinCol(int j); /// 3 3 3 3 3 3 3 3 3 3 3 3
+    int VMinLin(int i); /// 4 4 4 4 4 4 4 4 4 4 4 4
     int VMax();
     int VMin();
     bool Search(int val);
@@ -38,6 +41,125 @@ class Matrice{
 
     };
 
+    bool Matrice::Search(int val)
+    {
+        for(int i = 0;i < n*m; ++i)
+            if(this->a[i] == val)
+            return true;
+        return false;
+    }
+
+    int Matrice::VMin()
+    {
+        int vmin = 2000000000;
+        for(int i = 0;i < n*m; ++i)
+            if(this->a[i] < vmin)
+               vmin = this->a[i];
+        return vmin;
+    }
+
+    int Matrice::VMax()
+    {
+        int vmax = 0;
+        for(int i = 0;i < n*m; ++i)
+            if(this->a[i] > vmax)
+               vmax = this->a[i];
+        return vmax;
+    }
+
+    Matrice operator*(Matrice& x,Matrice& y)
+    {
+        if(x.m == y.n)
+        {
+            int l,c,S,a,b;
+            l = x.n;
+            c = y.m;
+            Matrice A(l,c);
+            for(int i = 0 ;i < l; ++i)
+                for(int j = 0;j < c; ++j)
+            {   S=0;
+                for(int k = 0;k < x.m; ++k)
+                {
+                    a = x.vGet(i,k);
+                    b = y.vGet(k,j);
+                    S+= a*b;
+                }
+                A.vSet(i,j,S);
+            }
+            return A;
+        }
+        Matrice R;
+           return R;
+
+    }
+
+    Matrice operator*(Matrice& x,int y)
+    {
+        int l,c,*z;
+        l = x.n;
+        c = x.m;
+        z = new int[l*c];
+        for(int i = 0;i < l*c; ++i)
+            z[i] = x.a[i] * y;
+        Matrice A(l,c,z);
+        return A;
+    }
+
+    Matrice operator*(int x,Matrice& y)
+    {
+        int l,c,*z;
+        l = y.n;
+        c = y.m;
+        z = new int[l*c];
+        for(int i = 0;i < l*c; ++i)
+            z[i] = y.a[i] * x;
+        Matrice A(l,c,z);
+        return A;
+    }
+
+    bool operator==(Matrice& x,Matrice& y)
+    {
+        if(x.n == y.n && x.m == y.m)
+        {
+            for(int i = 0;i < x.n*x.m; ++i)
+                if(x.a[i] != y.a[i])
+                return false;
+            return true;
+        }
+        return false;
+    }
+
+    bool operator!=(Matrice& x,Matrice& y)
+    {
+        if(x.n == y.n && x.m == y.m)
+        {
+            for(int i = 0;i < x.n*x.m; ++i)
+                if(x.a[i] != y.a[i])
+                return true;
+            return false;
+        }
+        return true;
+    }
+
+    Matrice operator-(Matrice& x,Matrice& y)
+    {
+        if(x.n == y.n && x.m == y.m)
+        {
+            int l,c;
+            l=x.n;
+            c=x.m;
+            int *z;
+            z = new int[l*c];
+            for(int i = 0;i < l*c ; i++)
+                z[i] = x.a[i] - y.a[i];
+            Matrice R(l,c,z);
+            return R;
+        }
+        Matrice R;
+            return R;
+
+    }
+
     Matrice operator+(Matrice& x,Matrice& y)
     {
         if(x.n == y.n && x.m == y.m)
@@ -52,18 +174,23 @@ class Matrice{
             Matrice R(l,c,z);
             return R;
         }
-        else {
-            Matrice R;
+        Matrice R;
             return R;
-        }
 
+    }
+
+    Matrice::Matrice(int l,int c)
+    {
+        n = l;
+        m = c;
+        a = new int[n*m];
     }
 
     Matrice::Matrice()
     {
-        n=0;
-        m=0;
-        a=NULL;
+        n = 0;
+        m = 0;
+        a = NULL;
     }
 
     Matrice::Matrice(Matrice &x)
@@ -109,7 +236,7 @@ class Matrice{
          for(int i=0;i < n;i++)
             for(int j=0;j < m;j++)
             {
-            b=ob.a[n*i+j];
+            b=ob.a[m*i+j];
             this->vSet(i,j,b);
             }
      }
@@ -157,17 +284,32 @@ int a[100][100],n,m,i,j;
 
 int main()
 {
-  Matrice A,B,C;
-  fin>>A;
-  fout<<A;
+  Matrice A,B,C,F,X;
+  fin >> A;
+  fout << A;
   Matrice D(A);
-  fin>>n>>m;
+  fin >> n >> m;
   for(i = 0;i < n; i++)
     for(j = 0;j < m; j++)
-        fin>>a[i][j];
+        fin >> a[i][j];
   Matrice E(n,m,a);
-  fout<<A<<D<<E;
-  C=A + A;
+  fout << A << D << E;
+  fin >> F;
+  C = F*F;
+  fout << C.VMax() << '\n';
+  C = 2*C;
+  fout << C.VMax() << '\n';
+  fout << C.VMin() << '\n';
   fout << C;
+
+  if(C.Search(300))
+    fout << "DA\n";
+  else
+    fout << "NU\n";
+
+  if(C.Search(41))
+    fout << "DA\n";
+  else
+    fout << "NU\n";
 
 }

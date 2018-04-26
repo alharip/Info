@@ -18,22 +18,52 @@ class Matrice{
     ~Matrice();
     void vSet(int i,int j,int val);
     int vGet(int i,int j);
+    int VMaxCol(int j);
+    int VMaxLin(int i);
+    int VMinCol(int j);
+    int VMinLin(int i);
+    int VMax();
+    int VMin();
+    bool Search(int val);
     friend istream& operator>>(istream &in, Matrice &A);
     friend ostream& operator<<(ostream &out, Matrice &A);
-    friend Matrice& operator+(Matrice& x,Matrice& y);
-    friend Matrice& operator-(Matrice& x,Matrice& y);
+    friend Matrice operator+(Matrice& x,Matrice& y);
+    friend Matrice operator-(Matrice& x,Matrice& y);
     friend bool operator==(Matrice& x,Matrice& y);
     friend bool operator!=(Matrice& x,Matrice& y);
-    friend Matrice& operator*(Matrice& x,Matrice& y);
-    friend Matrice& operator*(int x,Matrice& y);
-    friend Matrice& operator*(Matrice& x,int y);
+    friend Matrice operator*(Matrice& x,Matrice& y);
+    friend Matrice operator*(int x,Matrice& y);
+    friend Matrice operator*(Matrice& x,int y);
     Matrice& operator=(const Matrice &ob);
 
     };
 
+    Matrice operator+(Matrice& x,Matrice& y)
+    {
+        if(x.n == y.n && x.m == y.m)
+        {
+            int l,c;
+            l=x.n;
+            c=x.m;
+            int *z;
+            z = new int[l*c];
+            for(int i = 0;i < l*c ; i++)
+                z[i] = x.a[i] + y.a[i];
+            Matrice R(l,c,z);
+            return R;
+        }
+        else {
+            Matrice R;
+            return R;
+        }
+
+    }
+
     Matrice::Matrice()
     {
-        n=0;m=0;
+        n=0;
+        m=0;
+        a=NULL;
     }
 
     Matrice::Matrice(Matrice &x)
@@ -72,12 +102,12 @@ class Matrice{
      if( this != &ob)
      {
          int b;
-         this->~Matrice();
+         delete a;
          this->n=ob.n;
          this->m=ob.m;
          this->a=new int[n*m];
-         for(int i=0;i<n;i++)
-            for(int j=0;j<m;j++)
+         for(int i=0;i < n;i++)
+            for(int j=0;j < m;j++)
             {
             b=ob.a[n*i+j];
             this->vSet(i,j,b);
@@ -111,11 +141,12 @@ class Matrice{
     ostream& operator<<(ostream &out, Matrice &A)
     {
        out<<A.n<<" "<<A.m<<'\n';
-       for(int i=0;i<A.n;i++)
-        {for(int j=0;j<A.m;j++)
-        out<<A.vGet(i,j)<<' ';
-        out<<endl;
-        }
+       if(A.n != 0 && A.m != 0)
+        for(int i=0;i<A.n;i++)
+            {for(int j=0;j<A.m;j++)
+            out<<A.vGet(i,j)<<' ';
+            out<<endl;
+            }
        return out;
     }
 
@@ -133,8 +164,10 @@ int main()
   fin>>n>>m;
   for(i = 0;i < n; i++)
     for(j = 0;j < m; j++)
-    fin>>a[i][j];
+        fin>>a[i][j];
   Matrice E(n,m,a);
   fout<<A<<D<<E;
+  C=A + A;
+  fout << C;
 
 }

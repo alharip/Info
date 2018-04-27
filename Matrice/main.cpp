@@ -40,6 +40,80 @@ class Matrice{
     Matrice& operator=(const Matrice &ob);
 
     };
+     int Matrice::VMaxLin(int i)  ///2 2 2 2 2 2  2 2 2 2  2
+     {
+         if(i <= n && i != 0)
+         {
+
+
+         int lmax = 0;
+             for(int j = m*(i-1);j < m*i; j++)
+        if(this->a[j] > lmax)
+               lmax = this->a[j];
+        return lmax;
+
+         }
+         else return 0;
+
+
+
+
+
+     }
+
+
+     int Matrice::VMinLin(int i)  ///4 4 4 4 4 4 4 4 4 4
+     {
+         if(i<=n && i != 0)
+         {
+
+
+         int lmin = 2000000000;;
+             for(int j = m*(i-1);j < m*i; j++)
+        if(this->a[j] < lmin)
+               lmin = this->a[j];
+        return lmin;
+
+         }
+         else return 0;
+
+
+
+
+
+     }
+
+    int Matrice::VMaxCol(int j)  ///1 1 1 1 1 1 1 1 1 1
+    {
+        if(j <= m && j != 0)
+        {
+
+
+        int cmax = 0;
+        for(int i = j-1;i < n*m;i = i+m)
+        if(this->a[i] > cmax)
+               cmax = this->a[i];
+        return cmax;
+
+}
+else return 0;
+
+    }
+        int Matrice::VMinCol(int j)  ///3 3 3 3 3 3 3 3 3
+    {
+        if(j <= m && j != 0)
+        {
+
+
+        int cmin = 2000000000;
+        for(int i = j-1;i < n*m;i = i+m)
+        if(this->a[i] < cmin)
+               cmin = this->a[i];
+        return cmin;
+        }
+        else return 0;
+
+    }
 
     bool Matrice::Search(int val)
     {
@@ -287,6 +361,11 @@ int main()
   Matrice A,B,C,F,X;
   fin >> A;
   fout << A;
+
+    fout << A.VMaxCol(3) << '\n';
+    fout << A.VMinCol(2) << '\n';
+    fout << A.VMaxLin(0) << '\n';
+    fout << A.VMinLin(2) << '\n';
   Matrice D(A);
   fin >> n >> m;
   for(i = 0;i < n; i++)

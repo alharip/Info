@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1525342114 source:d:\work\11e\teza\main.cpp
+	<math.h>
+	<stdlib.h>
+	"Matrice.h"
+
+1525342670 d:\work\11e\teza\matrice.h
+	<iostream>
+	<fstream>
+
+1525342639 source:d:\work\11e\teza\matrice.cpp
+	"Matrice.h"
+
